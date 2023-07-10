@@ -1,7 +1,7 @@
 from gpiozero import MotionSensor
 from datetime import datetime
 import pytz
-from telegram.ext import Updater, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler
 import os
 import Thread
 import picamera
@@ -19,7 +19,6 @@ class RaspberryPiBot(object):
             return RaspberryPiBot._instance
 
     def __init__(self):
-        self.UseCommand = {}
         self.updater = Updater(os.getenv("TOKEN"), use_context=True)
         self.dispatcher = self.updater.dispatcher
         self.camera = picamera.PiCamera()
@@ -28,17 +27,21 @@ class RaspberryPiBot(object):
         self.run()
 
     def CreateHandler(self):
-        dispatcher_handler_text = MessageHandler(Filters.command | Filters.text, RaspberryPiBot.Dispatcher_text)
-        self.dispatcher.add_handler(dispatcher_handler_text)
+        self.dispatcher.add_handler(CommandHandler("photo", self.get_photo))
 
     def run(self):
         Thread.Thread(self.detect_motion, ())
         self.updater.start_polling(timeout=1990000, poll_interval=5)
         self.updater.idle()
 
-    @classmethod
-    def Dispatcher_text(self, update, context):
+    def get_photo(self, update, context):
         print(update)
+        self.camera.resolution = (1920, 1080)
+        now = datetime.now(pytz.timezone('Europe/Kyiv'))
+        photo_file = '/home/pi/Desktop/Photo/' + now.strftime("%d-%m-%Y-%H-%M-%S") + ".h264"
+        self.camera.start_preview()
+        self.camera.capture(photo_file)
+        context.bot.sendPhoto(os.getenv("CHAT_ID"), open(photo_file, 'rb'))
 
     def detect_motion(self):
         while True:
@@ -47,7 +50,7 @@ class RaspberryPiBot(object):
             now = datetime.now(pytz.timezone('Europe/Kyiv'))
             current_time = now.strftime("%H:%M:%S")
             print("Motion detected! Current Time =", current_time)
-            self.updater.bot.send_message(os.getenv("CHAT_ID"), ("Motion detected! Current Time =", current_time))
+            self.updater.bot.send_message("397362619", ("Motion detected! Current Time =", current_time))
             self.file_name = "/home/pi/Desktop/Video/" + now.strftime("%d-%m-%Y-%H-%M-%S") + ".h264"
             self.camera.start_recording(self.file_name)
             self.camera.wait_recording(20)
@@ -58,6 +61,7 @@ class RaspberryPiBot(object):
     def convert_video(self):
         file_mp4 = self.file_name.replace(".h264", ".mp4")
         command = "MP4Box -add " + self.file_name + " " + file_mp4
+        print(command)
         call([command], shell=True)
         self.file_name = file_mp4
 

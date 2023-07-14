@@ -8,8 +8,6 @@ import picamera
 from subprocess import call
 
 pir = MotionSensor(4)
-
-
 class RaspberryPiBot(object):
     _instance = None
 
@@ -19,7 +17,7 @@ class RaspberryPiBot(object):
             return RaspberryPiBot._instance
 
     def __init__(self):
-        self.updater = Updater(os.getenv("TOKEN"), use_context=True)
+        self.updater = Updater(os.getenv("TOKEN"), use_context=True) # os.getenv("TOKEN2"), use_context=True)
         self.dispatcher = self.updater.dispatcher
         self.camera = picamera.PiCamera()
         self.camera.resolution = (640, 480)
@@ -35,13 +33,13 @@ class RaspberryPiBot(object):
         self.updater.idle()
 
     def get_photo(self, update, context):
-        print(update)
         self.camera.resolution = (1920, 1080)
         now = datetime.now(pytz.timezone('Europe/Kyiv'))
-        photo_file = '/home/pi/Desktop/Photo/' + now.strftime("%d-%m-%Y-%H-%M-%S") + ".h264"
+        photo_file = '/home/pi/Desktop/Photo/' + now.strftime("%d-%m-%Y-%H-%M-%S") + ".jpg"
         self.camera.start_preview()
         self.camera.capture(photo_file)
         context.bot.sendPhoto(os.getenv("CHAT_ID"), open(photo_file, 'rb'))
+        self.camera.resolution = (640, 480)
 
     def detect_motion(self):
         while True:

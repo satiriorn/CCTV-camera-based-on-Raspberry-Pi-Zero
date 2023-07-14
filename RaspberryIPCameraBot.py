@@ -6,6 +6,8 @@ import os
 import Thread
 import picamera
 from subprocess import call
+from gpiozero import CPUTemperature
+import psutil
 
 pir = MotionSensor(4)
 class RaspberryPiBot(object):
@@ -21,6 +23,7 @@ class RaspberryPiBot(object):
         self.dispatcher = self.updater.dispatcher
         self.camera = picamera.PiCamera()
         self.camera.resolution = (640, 480)
+        self.cpu = CPUTemperature()
         self.recording = False
         self.CreateHandler()
         self.run()
@@ -28,6 +31,14 @@ class RaspberryPiBot(object):
     def CreateHandler(self):
         self.dispatcher.add_handler(CommandHandler("photo", self.get_photo))
         self.dispatcher.add_handler(CommandHandler("video", self.get_video))
+        self.dispatcher.add_handler(CommandHandler("stats", self.stats))
+
+    def stats(self, update, context):
+        bytes_avail = psutil.disk_usage('/').free
+        gigabytes_avail = bytes_avail / 1024 / 1024 / 1024
+        print(gigabytes_avail)
+        context.bot.send_message(os.getenv("CHAT_ID"),
+                                 "Free space: {0}gb\nTemperature CPU: {1}c\n".format(gigabytes_avail, self.cpu.temperature))
 
     def run(self):
         Thread.Thread(self.detect_motion, ())
@@ -67,7 +78,7 @@ class RaspberryPiBot(object):
             now = datetime.now(pytz.timezone('Europe/Kyiv'))
             current_time = now.strftime("%H:%M:%S")
             print("Motion detected! Current Time =", current_time)
-            self.updater.bot.send_message(os.getenv("CHAT_ID"), ("Motion detected! Current Time =", current_time))
+            self.updater.bot.send_message(os.getenv("CHAT_ID"), "Motion detected! Current Time ={0}".format(current_time))
             self.file_name = "/home/pi/Desktop/Video/" + now.strftime("%d-%m-%Y-%H-%M-%S") + ".h264"
             self.camera.start_recording(self.file_name)
             self.camera.wait_recording(20)

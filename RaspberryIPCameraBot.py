@@ -32,7 +32,10 @@ class RaspberryPiBot(object):
         self.dispatcher.add_handler(CommandHandler("photo", self.get_photo))
         self.dispatcher.add_handler(CommandHandler("video", self.get_video))
         self.dispatcher.add_handler(CommandHandler("stats", self.stats))
+        self.dispatcher.add_handler(CommandHandler("restart", self.restart))
 
+    def restart(self, update, context):
+        os.system("sudo reboot")
     def stats(self, update, context):
         bytes_avail = psutil.disk_usage('/').free
         gigabytes_avail = bytes_avail / 1024 / 1024 / 1024

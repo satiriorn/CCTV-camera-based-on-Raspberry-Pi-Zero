@@ -8,7 +8,7 @@ The project consists of the following elements:
 
 Scheme of connecting elements:
 
-<img src="https://github.com/satiriorn/CCTV-camera-based-on-Raspberry-Pi-Zero/blob/Satiriorn/image/Schema_connected_elements?raw=true" alt="Scheme of connecting elements"/>
+<img src="https://github.com/satiriorn/CCTV-camera-based-on-Raspberry-Pi-Zero/blob/Satiriorn/image/Schema_connected_elements.jpg" alt="Scheme of connecting elements"/>
 
 Camera startup process:
 -Install on sd card Raspbian: https://www.raspberrypi.com/software/
@@ -19,7 +19,7 @@ Camera startup process:
 -Launching the camera via command - python RaspberryIPCameraBot.py
 
 View of the camera in the printed case:
-<img src="https://github.com/satiriorn/CCTV-camera-based-on-Raspberry-Pi-Zero/blob/Satiriorn/image/result?raw=true" alt="Result"/>
+<img src="https://github.com/satiriorn/CCTV-camera-based-on-Raspberry-Pi-Zero/blob/Satiriorn/image/result.jpg" alt="Result"/>
 
 Test camera in telegram:
-<img src="https://github.com/satiriorn/CCTV-camera-based-on-Raspberry-Pi-Zero/blob/Satiriorn/image/test?raw=true" alt="Result"/>
+<img src="https://github.com/satiriorn/CCTV-camera-based-on-Raspberry-Pi-Zero/blob/Satiriorn/image/test.jpg" alt="Result"/>

@@ -8,7 +8,7 @@ The project consists of the following elements:
 
 Scheme of connecting elements:
 
-<img src="https://github.com/satiriorn/CCTV-camera-based-on-Raspberry-Pi-Zero/blob/Satiriorn/image/Schema_connected_elements.jpg" alt="Scheme of connecting elements"/>
+<img src="https://github.com/satiriorn/CCTV-camera-based-on-Raspberry-Pi-Zero/blob/Satiriorn/image/Scheme_connected_elements.jpg" alt="Scheme of connecting elements"/>
 
 Camera startup process:
 -Install on sd card Raspbian: https://www.raspberrypi.com/software/

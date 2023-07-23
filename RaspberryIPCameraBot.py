@@ -50,7 +50,7 @@ class RaspberryPiBot(object):
 
     def get_video(self, update, context):
         if self.recording:
-            context.bot.send_message(os.getenv("CHAT_ID"), "На даний момент було зафіксовано рух, неможливо отримати ваш запит")
+            context.bot.send_message(os.getenv("CHAT_ID"), "Motion detected, the camera is processing another request")
         else:
             self.recording = True
             now = datetime.now(pytz.timezone('Europe/Kyiv'))
@@ -63,7 +63,7 @@ class RaspberryPiBot(object):
             self.recording = False
     def get_photo(self, update, context):
         if self.recording:
-            context.bot.send_message(os.getenv("CHAT_ID"),"На даний момент було зафіксовано рух, неможливо отримати ваш запит")
+            context.bot.send_message(os.getenv("CHAT_ID"),"Motion detected, the camera is processing another request")
         else:
             self.camera.resolution = (1920, 1080)
             now = datetime.now(pytz.timezone('Europe/Kyiv'))
